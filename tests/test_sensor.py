@@ -8,3 +8,6 @@ def test_freezing_point():
 
 def test_room_temperature():
     assert to_celsius(68) == 20
+
+def test_hot_weather():
+    assert to_celsius(86) == 30
