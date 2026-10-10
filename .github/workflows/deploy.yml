@@ -28,3 +28,60 @@ jobs:
         run: |
           echo "Deploying $(ls dist/platform-lab-*.zip) to dev"
           echo "BROKER_URL is ${{ vars.BROKER_URL }}"
+
+  deploy-test:
+    needs: deploy-dev
+    runs-on: ubuntu-latest
+    environment: test
+    steps:
+      - name: Download package from release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: gh release download "${{ inputs.version }}" --dir dist --pattern "platform-lab-*.zip" --pattern "SHA256SUMS.txt"
+
+      - name: Verify checksum
+        run: sha256sum -c dist/SHA256SUMS.txt
+
+      - name: Deploy to test
+        run: |
+          echo "Deploying $(ls dist/platform-lab-*.zip) to test"
+          echo "BROKER_URL is ${{ vars.BROKER_URL }}"
+
+  deploy-validation:
+    needs: deploy-test
+    runs-on: ubuntu-latest
+    environment: validation
+    steps:
+      - name: Download package from release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: gh release download "${{ inputs.version }}" --dir dist --pattern "platform-lab-*.zip" --pattern "SHA256SUMS.txt"
+
+      - name: Verify checksum
+        run: sha256sum -c dist/SHA256SUMS.txt
+
+      - name: Deploy to validation
+        run: |
+          echo "Deploying $(ls dist/platform-lab-*.zip) to validation"
+          echo "BROKER_URL is ${{ vars.BROKER_URL }}"
+
+  deploy-prod:
+    needs: deploy-validation
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+      - name: Download package from release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: gh release download "${{ inputs.version }}" --dir dist --pattern "platform-lab-*.zip" --pattern "SHA256SUMS.txt"
+
+      - name: Verify checksum
+        run: sha256sum -c dist/SHA256SUMS.txt
+
+      - name: Deploy to prod
+        run: |
+          echo "Deploying $(ls dist/platform-lab-*.zip) to prod"
+          echo "BROKER_URL is ${{ vars.BROKER_URL }}"
