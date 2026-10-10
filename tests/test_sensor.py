@@ -6,3 +6,5 @@ def test_boiling_point():
 def test_freezing_point():
     assert to_celsius(32) == 0
 
+def test_room_temperature():
+    assert to_celsius(68) == 20
