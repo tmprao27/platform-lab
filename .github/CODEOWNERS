@@ -1,0 +1,5 @@
+# Default: tmprao27 reviews anything not listed below
+*                       @tmprao27
+
+# Pipeline rules: only mag-reviewer can approve changes here
+/.github/workflows/     @magaiworkspace-ux
