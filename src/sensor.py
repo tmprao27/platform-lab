@@ -3,3 +3,6 @@ def to_celsius(f):
 
 def to_fahrenheit(c):
     return round(c * 9 / 5 + 32, 2)
+
+def to_kelvin(c):
+    return round(c + 273.15, 2)
